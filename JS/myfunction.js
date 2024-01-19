@@ -99,6 +99,7 @@ function generateBoxGrid(rows, colums, container, boxClasses = "", boxText = "")
   container.innerHTML = "";
   container.style.display = "flex";
   container.style.flexWrap = "wrap";
+  container.classList.remove("flex-column");
 
   for (let i = 0; i < gridDimension; i++) {
     const newCell = generateCell(boxText, boxClasses);
@@ -109,10 +110,10 @@ function generateBoxGrid(rows, colums, container, boxClasses = "", boxText = "")
     container.append(newCell);
   }
 
-  const cells = document.querySelectorAll(".box");
-  for (let i = 0; i < cells.length; i++) {
-    cells[i].innerText = cells[i].getAttribute("data-grid-box-index");
-  }
+  // const cells = document.querySelectorAll(".box");
+  // for (let i = 0; i < cells.length; i++) {
+  //   cells[i].innerText = cells[i].getAttribute("data-grid-box-index");
+  // }
 }
 
 function generateCell(text = "", classes = "") {
@@ -121,7 +122,7 @@ function generateCell(text = "", classes = "") {
   cell.innerText = text;
 
   cell.addEventListener("click", function () {
-    if (typeof cellClickHandler === "function") cellClickHandler(this);
+    cellClickHandler(this);
   });
 
   return cell;
@@ -135,11 +136,26 @@ function clearBoxGrid(container) {
 }
 
 function cellClickHandler(element) {
-  element.classList.toggle("clicked");
-  console.log(element.getAttribute("data-grid-box-index"));
+  if (element.classList.contains("clicked")) return;
+
+  element.classList.add("clicked");
+  // element.classList.add("off");
+
+  let boxClicked = parseInt(element.getAttribute("data-grid-box-index"));
+
+  if (bombs.includes(boxClicked)) {
+    gameOver();
+    return;
+  } else {
+    score++;
+  }
+
+  scoreEl.innerText = score;
 }
 
 function generateLevelSelector(element) {
+  element.classList.add("flex-column");
+
   element.innerHTML = `
   <h3>Seleziona la difficoltà:</h3>
   <div class="btn-wrapper mb-3">
@@ -180,4 +196,21 @@ function getLevel() {
   }
 
   return levelValue;
+}
+
+function gameOver() {
+  const cells = document.querySelectorAll(".box");
+
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    const cellIndex = parseInt(cell.getAttribute("data-grid-box-index"));
+    if (bombs.includes(cellIndex)) {
+      cell.classList.add("bombClicked");
+    }
+    // cell.classList.add("off");
+  }
+
+  gameboardEl.classList.add("gameover");
+
+  scoreEl.innerText = `Game Over: your score is: ${score}`;
 }

@@ -1,5 +1,11 @@
 /* -- RESET */
 
+.icon::before {
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* --CUSTOM PROPS */
 
 :root {
@@ -42,6 +48,8 @@
 
   width: 700px;
   height: 700px;
+
+  position: relative;
 }
 
 .box {
@@ -56,4 +64,34 @@
 .clicked {
   background-color: #0d6efd;
   color: white;
+}
+
+.box.bombClicked {
+  background-color: #e70c0c;
+  border: 1px solid #e70c0c;
+}
+
+.box.clicked.bombClicked {
+  background-color: #e3aa00;
+  border: 1px solid #e3aa00;
+}
+
+.gameboard.gameover::before {
+  content: "";
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+}
+
+.gameboard.gameover:hover::before {
+  opacity: 0.05;
 }
