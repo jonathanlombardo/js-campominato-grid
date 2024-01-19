@@ -29,15 +29,11 @@ newGameButton.addEventListener("click", function () {
 
     bombs.splice(0, bombsQTY);
 
-    for (let i = 0; i < bombsQTY; i++) {
-      let newBomb;
-
-      while (bombs.includes(newBomb) || !newBomb) {
-        newBomb = getRandomNumber(gridDim * gridDim);
-      }
-
-      bombs.push(newBomb);
+    while (bombs.length < bombsQTY) {
+      let newBomb = getRandomNumber(gridDim * gridDim);
+      if (!bombs.includes(newBomb)) bombs.push(newBomb);
     }
+
     console.log(bombs);
     newGameButton.classList.remove("disabled");
 
